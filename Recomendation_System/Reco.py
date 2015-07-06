@@ -16,16 +16,26 @@ def read_from_file(path):
 
 def word_cut(list_of_string):
     list_of_pieces_word=[]
-    for line in list_of_string[:20]:
+    for line in list_of_string[:100]:
         no_punct_line = remove_punctuation(line)
-        list_of_pieces_word.append(' '.join(jieba.cut(no_punct_line)))
+        try:
+            cutted_line = jieba.cut(no_punct_line)
+        except:
+            continue
+        list_of_pieces_word.append(' '.join(cutted_line))
     return list_of_pieces_word
 
 def remove_punctuation(description):
-    return re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf8"), "".decode("utf8"),description)
+    try:
+        result = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf8"), "".decode("utf8"),description)
+    except:
+        result = ''
+    return result
 
 
 car_id,car_desc = read_from_file('C:\Users\Administrator\Desktop\data\car_description\car_description.xlsx')
+
 cutted_car_desc = word_cut(car_desc)
+
 print cutted_car_desc[4]
 
