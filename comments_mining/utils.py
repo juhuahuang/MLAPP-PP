@@ -13,16 +13,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-# read in file from dist
-# input file format: id1 id2 comments
-# output: list of string [str1,str2,str3,......]
-def read_comment_from_file(path):
-	ff=open(path)
-	comments=[]
-	for line in ff:
-		sentence = line.split('\t')
-		comments.extend(sentence[2:])
-	return comments
+
 
 
 def read_in_dict(path):
@@ -43,7 +34,6 @@ def word_cut(list_of_string):
     word_flag={}
     list_of_pieces_word=[]
     for line in list_of_string:
-        no_punct_line = remove_punctuation(line)
         try:
             cutted_line = pseg.cut(no_punct_line)
         except:
@@ -56,13 +46,6 @@ def word_cut(list_of_string):
     return list_of_pieces_word, word_flag
 
 
-# replace punctuation with space
-def remove_punctuation(description):
-    try:
-        result = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+¡ª¡ª£¡£¬¡££¿¡¢~@#£¤%¡­¡­&*£¨£©]+".decode("utf8"), " ".decode("utf8"),description.decode('utf8'))
-    except:
-        result = ''
-    return result
 
 
 # extract text features by tf-idf and reversed sorted by weight. write into files in the end
