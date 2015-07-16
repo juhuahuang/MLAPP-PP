@@ -79,7 +79,7 @@ def tfidf(corpus,word_category,file_to_write):
     word_and_weight=[]
     for i in range(len(sum_weight)):
         word_and_weight.append([word[i],sum_weight[i]])
-	word_and_weight.sort(key = lambda key: key[1],reverse = True)
+    word_and_weight.sort(key = lambda key: key[1],reverse = True)
     f = open(file_to_write,'w+')
     result =[]
     for j in range(len(word_and_weight)) :
@@ -87,7 +87,7 @@ def tfidf(corpus,word_category,file_to_write):
             f.write(word_and_weight[j][0]+ ' ' + str(word_and_weight[j][1]) + ' ' +word_category[word_and_weight[j][0]] +"\n")
             result.append([word_and_weight[j][0], word_and_weight[j][1], word_category[word_and_weight[j][0]] ])
         except:
-			continue
+            continue
     f.close()
     return result
 
@@ -107,15 +107,15 @@ def get_topK(word_weight_category, k = sys.maxint, category_list =['n','v','vd',
     return result
 
 def get_car_tag(path,car_id, top_k):
-	ff=open(path)
-	comments=''
-	for line in ff:
-		sentence = line.split('\t')
-		try:
-			if int(sentence[1]) == int(car_id):
-				for line in sentence[2:]:
-					comments = comments + line+' '
-		except:
-			continue
-	tags = jieba.analyse.extract_tags(comments, topK= top_k)
-	return tags
+    ff=open(path)
+    comments=''
+    for line in ff:
+        sentence = line.split('\t')
+        try:
+            if int(sentence[1]) == int(car_id):
+                for line in sentence[2:]:
+                    comments = comments + line+' '
+        except:
+            continue
+    tags = jieba.analyse.extract_tags(comments, topK= top_k)
+    return tags
