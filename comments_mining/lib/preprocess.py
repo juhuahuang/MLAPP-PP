@@ -1,13 +1,16 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 __author__ = 'Administrator'
 
 
 import sys
 
 sys.path.append('/mnt/work/issues/pdlib/py')
+try:
+    import mydb
+except:
+    pass
 
-import mydb
 import re
 from pandas import DataFrame
 
@@ -24,18 +27,6 @@ def get_data_from_db(sql):
     return comments_df
 
 
-def remove_punctuation(comment):
-    '''
-    :param comment:
-    :return:
-    df['comment'].map(remove_punctuation)
-    '''
-    try:
-        result = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf8"), " ".decode("utf8"),comment.decode('utf8'))
-        if len(result) < 30:
-            result = ''
-    except:
-        result = ''
-    return result
+
 
 
