@@ -32,6 +32,17 @@ all_comments = read_all_comments_from_file( '..\data\\all_comments')
 keywords=df[0]
 
 
+def keys_recall_comments(comment_set,keywords):
+    car_keywords={}
+    for ind in comment_set:
+        car_id = comment_set['carID'].iloc[ind]
+    	comments = string.strip(str(comment_set['comment'].iloc[ind]))
+    	if car_id not in car_keywords.keys():
+            car_keywords[car_id] =set()
+    	key_sets = search_keywords(comments,keywords)
+    	car_keywords[car_id] = car_keywords[car_id].union(key_sets)
+
+
 car_keywords = {}
 for ind in all_comments.index:
     car_id = all_comments['carID'].iloc[ind]
