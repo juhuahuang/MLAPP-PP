@@ -17,15 +17,13 @@ sys.setdefaultencoding('utf8')
 
 
 
-def read_in_dict(path):
+def read_in_keys(path):
     ff=open(path)
-    word_dict ={}
+    keys =set()
     for line in ff:
-        space_index = line.index(' ')
-        word = line[:space_index]
-        count = int(line[space_index:])
-        word_dict[word] = count
-    return word_dict
+        tmp = line.split(' ')
+        keys.add(tmp[0])
+    return keys
 
 # Chinese word cut
 # input format: list of string, which usually is the output from read_comment_from_file()
@@ -79,14 +77,14 @@ def tfidf(corpus,word_category,file_to_write):
     return result
 
 
-def get_topK(word_weight_category, file_to_write,k = sys.maxint, category_list =['n','v','vd','vn','vf','a','ad','an','ag','al']):
+def get_topK(word_weight_category, file_to_write,k, category_list):
     ff = open(file_to_write,'w')
     result = []
     i = 0
     for word, weight, category in word_weight_category:
         if category in category_list:
-            ff.writelines(word + ' ' + str(weight) + ' ' + category + '\n')
-            result.append([word, weight, category ])
+            ff.writelines(word.strip() + ' ' + str(weight) + ' ' + category + '\n')
+            result.append([word.strip(), weight, category ])
             i = i+1
         if i > k:
             break

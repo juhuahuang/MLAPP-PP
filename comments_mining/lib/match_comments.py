@@ -5,6 +5,7 @@ __author__ = 'Administrator'
 
 import sys
 import string
+import utils
 reload(sys)
 sys.setdefaultencoding('utf8')
 from pandas import DataFrame
@@ -27,10 +28,6 @@ def search_keywords(comments,keywords):
             result.add(key)
     return result
 
-df=read_keyword_from_file(path = '..\data\\top_k_word_order_review')
-all_comments = read_all_comments_from_file( '..\data\\all_comments')
-keywords=df[0]
-
 
 def keys_recall_comments(comment_set,keywords):
     car_keywords={}
@@ -42,28 +39,50 @@ def keys_recall_comments(comment_set,keywords):
     	key_sets = search_keywords(comments,keywords)
     	car_keywords[car_id] = car_keywords[car_id].union(key_sets)
 
-
-car_keywords = {}
-for ind in all_comments.index:
-    car_id = all_comments['carID'].iloc[ind]
-    comments = string.strip(str(all_comments['comment'].iloc[ind]))
-    if car_id not in car_keywords.keys():
-        car_keywords[car_id] =set()
-    key_sets = search_keywords(comments,keywords)
-    car_keywords[car_id] = car_keywords[car_id].union(key_sets)
-
-result =[]
-for id in car_keywords:
-    counts = len(car_keywords[id])
-    result.append([id,counts])
-result.sort(key = lambda key: key[1],reverse = True)
-print result
-ff = open('tags_count','w')
-for line in result:
-    ff.writelines(str(line[0]) + ' ' + str(line[1]) + '\n')
-ff.close()
+def tag_comments(comment,keys):
+    tags = set()
+    comment = utils.remove_punctuation(comment)
+    comment = comment.strip(' ')
+    split_comment = comment.split(' ')
+    ff = open('../data/tag_comments','w')
+    for phrase in split_comment:
+        phrase = phrase.strip(' ')
+        for key in keys:
+            if phrase.find(key) > -1:
+                if len(phrase) < 7 and len(phrase) >2:
+                    #len(phrase) 返回的是中文字的个数，不是真实长度（中文字×3）
+                    comment = comment.replace(phrase,"$%s$" % (phrase))
+                    tags.add(phrase)
+        result =  "%s >> %s" % (comment.rstrip(), "\t".join(list(tags)))
+    return result
 
 
+#
+# df=read_keyword_from_file(path = '..\data\\top_k_word_order_review')
+# all_comments = read_all_comments_from_file( '..\data\\all_comments')
+# keywords=df[0]
+#
+# car_keywords = {}
+# for ind in all_comments.index:
+#     car_id = all_comments['carID'].iloc[ind]
+#     comments = string.strip(str(all_comments['comment'].iloc[ind]))
+#     if car_id not in car_keywords.keys():
+#         car_keywords[car_id] =set()
+#     key_sets = search_keywords(comments,keywords)
+#     car_keywords[car_id] = car_keywords[car_id].union(key_sets)
+#
+# result =[]
+# for id in car_keywords:
+#     counts = len(car_keywords[id])
+#     result.append([id,counts])
+# result.sort(key = lambda key: key[1],reverse = True)
+# print result
+# ff = open('tags_count','w')
+# for line in result:
+#     ff.writelines(str(line[0]) + ' ' + str(line[1]) + '\n')
+# ff.close()
 
+# tag_comments('what a nice day',['what', 'nice'])
+#
 
 

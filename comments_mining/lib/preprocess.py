@@ -11,7 +11,6 @@ try:
 except:
     pass
 
-import re
 from pandas import DataFrame
 
 # read in file from disk
