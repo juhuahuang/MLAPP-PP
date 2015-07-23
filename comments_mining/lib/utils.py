@@ -118,3 +118,9 @@ def remove_punctuation(comment):
     except:
         result = ''
     return result
+
+def jieba_add_dict(path):
+    ff = open(path)
+    for word in ff:
+        jieba.suggest_freq(word,True)
+    ff.close()

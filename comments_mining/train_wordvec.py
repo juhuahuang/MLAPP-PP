@@ -3,48 +3,42 @@
 
 
 import sys
+sys.path.append('./lib')
 import jieba
 import numpy as np
-sys.path.append('./lib')
-sys.path.append('/mnt/work/issues/pdlib/py')
 import utils
 import preprocess
 import gensim
 import wordvec
+import argparse
 __author__ = 'Administrator'
 
 
-#
-# for line in open('data/tags'):
-#     jieba.suggest_freq(line.strip(),True)
-#
-# document = []
-# for line in open('data/all_comments'):
-#     line =  utils.remove_punctuation(line)
-#     cutted_line = jieba.cut(line)
-#     document.append(list(cutted_line))
-# model = gensim.models.Word2Vec(document)
-# model.save('wordvec_model_tag')
 
-model = gensim.models.Word2Vec.load('data/wordvec_model')
-print model.similarity(u'差',u'好')
+def train_word_vector(source,dict,wordvec):
+    utils.jieba_add_dict(dict)
+    document = []
+    for line in open(source):
+        line =  utils.remove_punctuation(line)
+        cutted_line = jieba.cut(line)
+        document.append(list(cutted_line))
+    model = gensim.models.Word2Vec(document)
+    print 'saving word vector model'
+    model.save(wordvec)
+    return model
 
+if __name__=="__main__":
+    reload(sys)
+    sys.setdefaultencoding("utf-8")
+    parser = argparse.ArgumentParser(description='train word vector')
+    parser.add_argument('-s', '--source', default= 'data/all_comments',type=str,help ='file path')
+    parser.add_argument('-u', '--dict', default= 'data/udf_dict',type=str,help ='UDF dict path')
+    parser.add_argument('-o', '--wordvec', default= 'data/wordvec_model',type=str,help ='output file name')
+    args = parser.parse_args()
 
-tags =[]
-tag_mapping = {}
-for line in open('data/tags'):
-    tags.append(line.strip('\n'))
-for tag_iter1 in tags:
-    if tag_iter1 in tag_mapping.keys():
-        continue
-    else:
-        tag_mapping[tag_iter1] = tag_iter1
-    for tag_iter2 in tags[1:]:
-        v,same_meaning= wordvec.compare_phrase(tag_iter1.strip(),tag_iter2.strip(),model)
-        if same_meaning:
-             tag_mapping[tag_iter2] = tag_iter1
-ff = open('synonyms','w')
-for key in tag_mapping:
-    ff.write('%s\t%s\n' % (key, tag_mapping[key]))
-    print key, tag_mapping[key]
-ff.close()
+    source = args.source
+    dict = args.dict
+    wordvec = args.wordvec
+
+    train_word_vector(source,dict,wordvec)
+
