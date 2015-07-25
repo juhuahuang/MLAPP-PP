@@ -10,7 +10,7 @@
 
 import sys
 sys.path.append('./lib')
-import mydb
+# import mydb
 import numpy as np
 import utils
 import preprocess
@@ -21,31 +21,26 @@ import argparse
 
 
 
+class tagging:
 
+    def __init__(self,dict,model_source,tag_source):
+        utils.jieba_add_dict(dict)
+        self.tag_repo=[]
+        self.tags_repo=[]
+        for line in open(tag_source):
+            self.tags_repo.append(line)
+        self.model = gensim.models.Word2Vec.load(model_source)
 
-def tag_comments(comments,dict,model_source,tag_source,file_to_write):
-    utils.jieba_add_dict(dict)
-    tags_repo=[]
-    for line in open(tag_source):
-        tags_repo.append(line)
-    model = gensim.models.Word2Vec.load(model_source)
-    comments = map(utils.remove_punctuation,comments)
-    phrase_tag = set()
-    for c in comments:
-        phrase_list = c.split(' ')
+    def tag_comments(self, comments):
+        comments = utils.remove_punctuation(comments)
+        phrase_tag = set()
+        phrase_list = comments.split(' ')
         for p in phrase_list:
-            for t in tags_repo:
-                match_part, if_same = wordvec.compare_phrase(p, t,model)
+            for t in self.tags_repo:
+                match_part, if_same = wordvec.compare_phrase(p, t,self.model)
                 if if_same:
                     phrase_tag.add((p,t))
-    ff = open(file_to_write,'w')
-    for s in phrase_tag:
-        towrite = ''
-        for e in s:
-            towrite = towrite + '\t'+ e
-        ff.write(towrite+'\n')
-    ff.close()
-    return towrite
+        return phrase_tag
 
 
 if __name__=="__main__":
@@ -60,14 +55,24 @@ if __name__=="__main__":
     args = parser.parse_args()
 
 
-    dict = args.dict
-    wordvec_source = args.wordvec
-    tag = args.tag
-    id = args.carID
-    output = args.output
-    sql = '''select `comment` from order_reviews where carID = %s''' % id
-    pydb = mydb.get_db()
-    comments = pydb.exec_sql(sql)
-    comments = [c['comment'] for c in comments]
+    # dict = args.dict
+    # wordvec_source = args.wordvec
+    # tag = args.tag
+    # id = args.carID
+    # sql = '''select `comment` from order_reviews where carID = %s''' % id
+    # pydb = mydb.get_db()
+    # comments = pydb.exec_sql(sql)
+    # comments = [c['comment'] for c in comments]
+    # make_tag = tagging(dict,wordvec_source,tag)
 
-    tag_comments(comments,dict,wordvec_source,tag,output)
+
+    # make_tag = tagging('test_dict','data/wordvec_model','artificial_tag')
+    # comments = [
+    #     '驾驶轻松动力足，gps等配备齐全，空间巨大，坐五个人一点都不挤。后备箱也超大，只有塞不满没有装不下。',
+    #     '车况好 商务车 车主特别好',
+    #     '车主人好，车也很好用。车辆省油，整洁干净，车主和气，很好',
+    #     '车很好开，车主人也很好说话～',
+    #     '感觉这车开的挺舒服的，车主和PP网都挺好的，下次还选PP，加油！'
+    # ]
+    # result = map(make_tag.tag_comments,comments)
+    utils.print2file('test',result)

@@ -41,4 +41,6 @@ def compare_phrase(str1, str2,model):
             if similarity > max(upper_ss_threshold, upper_tt_threshold):
                 result.append([ss,tt,similarity])
                 break
+    if len(cut_str2) ==1 or len(cut_str1) == 1:
+        return result, len(result) >= 1
     return result,len(result) >=2
