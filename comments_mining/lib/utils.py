@@ -124,3 +124,11 @@ def jieba_add_dict(path):
     for word in ff:
         jieba.suggest_freq(word,True)
     ff.close()
+
+def print_listoflist2string(input):
+    tmp =''
+    for line in input:
+        for e in line:
+            tmp = tmp + str(e) + ':'
+        tmp = tmp[:-1] + '\t'
+    return tmp
