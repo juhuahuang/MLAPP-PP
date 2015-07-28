@@ -29,8 +29,7 @@ if __name__=="__main__":
     result = DataFrame()
     comments_df = DataFrame.from_csv('data/comments',sep = '\t')
     comments_df = comments_df[300:500]
-    make_tag = tag_comments.tagging('data/udf_dict','data/wordvec_model','data/artificial_tag')
-    # comments_df['tags'] = comments_df[:30]['comment'].map(make_tag.tag_comments)
-    comments_df['tags'] = comments_df['comment'].map(make_tag.tag_comments)
+    make_tag = tag_comments.tagging('data/udf_dict','data/wordvec_model_test','data/artificial_tag')
+    comments_df['tags'] = comments_df['comment'].map(make_tag.tag_comments_test)
     comments_df['tags'] = comments_df['tags'].map(utils.print_listoflist2string)
-    comments_df.to_csv('tag_all',sep='#')
+    comments_df.to_csv('tag_test',sep='#')

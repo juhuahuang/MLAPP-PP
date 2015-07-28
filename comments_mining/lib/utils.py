@@ -122,7 +122,7 @@ def remove_punctuation(comment):
 def jieba_add_dict(path):
     ff = open(path)
     for word in ff:
-        jieba.suggest_freq(word,True)
+        jieba.add_word(word.strip())
     ff.close()
 
 def print_listoflist2string(input):

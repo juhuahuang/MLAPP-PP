@@ -31,7 +31,7 @@ if __name__=="__main__":
     reload(sys)
     sys.setdefaultencoding("utf-8")
     parser = argparse.ArgumentParser(description='train word vector')
-    parser.add_argument('-s', '--source', default= 'data/all_comments',type=str,help ='file path')
+    parser.add_argument('-s', '--source', default= 'data/all_text',type=str,help ='file path')
     parser.add_argument('-u', '--dict', default= 'data/udf_dict',type=str,help ='UDF dict path')
     parser.add_argument('-o', '--wordvec', default= 'data/wordvec_model',type=str,help ='output file name')
     args = parser.parse_args()

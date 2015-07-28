@@ -28,13 +28,17 @@ def compare_phrase(str1, str2,model):
     for ss in cut_str1:
         if ss not in model:
             continue
-        upper_ss_threshold = model[ss].mean() + 2*model[ss].std()
-        lower_ss_threshold = model[ss].mean() - 2*model[ss].std()
+        # upper_ss_threshold = model[ss].mean() + 2*model[ss].std()
+        # lower_ss_threshold = model[ss].mean() - 2*model[ss].std()
+        upper_ss_threshold = 0.6
+        lower_ss_threshold = -0.5
         for tt in cut_str2:
             if tt not in model:
                 continue
-            upper_tt_threshold = model[tt].mean() + 2*model[tt].std()
-            lower_tt_threshold = model[tt].mean() - 2*model[tt].std()
+            # upper_tt_threshold = model[tt].mean() + 2*model[tt].std()
+            # lower_tt_threshold = model[tt].mean() - 2*model[tt].std()
+            upper_tt_threshold = 0.6
+            lower_tt_threshold = -0.5
             similarity = model.similarity(ss,tt)
             if similarity < min(lower_ss_threshold, lower_tt_threshold):
                 return [],False

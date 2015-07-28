@@ -31,7 +31,7 @@ class tagging:
             self.tags_repo.append(line)
         self.model = gensim.models.Word2Vec.load(model_source)
 
-    def tag_comments(self, comments):
+    def tag_comments_test(self, comments):
         comments = utils.remove_punctuation(comments)
         phrase_tag = set()
         phrase_list = comments.split(' ')
@@ -42,6 +42,16 @@ class tagging:
                     phrase_tag.add((p,t))
         return phrase_tag
 
+    def tag_comments_database(self, comments):
+        comments = utils.remove_punctuation(comments)
+        phrase_tag = set()
+        phrase_list = comments.split(' ')
+        for p in phrase_list:
+            for t in self.tags_repo:
+                match_part, if_same = wordvec.compare_phrase(p, t,self.model)
+                if if_same:
+                    phrase_tag.add(t)
+        return phrase_tag
 
 if __name__=="__main__":
     reload(sys)
