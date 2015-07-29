@@ -11,14 +11,16 @@ import preprocess
 import gensim
 import wordvec
 import argparse
+from pandas import DataFrame
 __author__ = 'Administrator'
 
 
 
 def train_word_vector(source,dict,wordvec):
     utils.jieba_add_dict(dict)
+    comments_df = DataFrame.from_csv(source,sep = '\t')
     document = []
-    for line in open(source):
+    for line in comments_df['comment'].values:
         line =  utils.remove_punctuation(line)
         cutted_line = jieba.cut(line)
         document.append(list(cutted_line))

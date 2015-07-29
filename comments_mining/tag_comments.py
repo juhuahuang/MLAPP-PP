@@ -37,13 +37,14 @@ class tagging:
         phrase_list = comments.split(' ')
         for p in phrase_list:
             for t in self.tags_repo:
-                match_part, if_same = wordvec.compare_phrase(p, t,self.model)
+                match_part, if_same = wordvec.compare_phrase(p.strip(), t.strip(),self.model)
                 if if_same:
                     phrase_tag.add((p,t))
         return phrase_tag
 
     def tag_comments_database(self, comments):
         comments = utils.remove_punctuation(comments)
+        print comments
         phrase_tag = set()
         phrase_list = comments.split(' ')
         for p in phrase_list:

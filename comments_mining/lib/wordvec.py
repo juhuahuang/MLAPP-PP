@@ -22,29 +22,13 @@ def calculate_word_vector_model(input_path,output_path = None):
     return model
 
 def compare_phrase(str1, str2,model):
+    if len(str1) < 6 or len(str2) < 6:
+        return 0, False
     cut_str1 = list(jieba.cut(str1))
     cut_str2 = list(jieba.cut(str2))
-    result = []
-    for ss in cut_str1:
-        if ss not in model:
-            continue
-        # upper_ss_threshold = model[ss].mean() + 2*model[ss].std()
-        # lower_ss_threshold = model[ss].mean() - 2*model[ss].std()
-        upper_ss_threshold = 0.6
-        lower_ss_threshold = -0.5
-        for tt in cut_str2:
-            if tt not in model:
-                continue
-            # upper_tt_threshold = model[tt].mean() + 2*model[tt].std()
-            # lower_tt_threshold = model[tt].mean() - 2*model[tt].std()
-            upper_tt_threshold = 0.6
-            lower_tt_threshold = -0.5
-            similarity = model.similarity(ss,tt)
-            if similarity < min(lower_ss_threshold, lower_tt_threshold):
-                return [],False
-            if similarity > max(upper_ss_threshold, upper_tt_threshold):
-                result.append([ss,tt,similarity])
-                break
-    if len(cut_str2) ==1 or len(cut_str1) == 1:
-        return result, len(result) >= 1
-    return result,len(result) >=2
+    try:
+        similarity = model.n_similarity(cut_str1,cut_str2)
+    except:
+        print str1,unicode(str2)
+        similarity = 0
+    return similarity,similarity > 0.6
