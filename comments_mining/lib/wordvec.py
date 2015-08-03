@@ -20,19 +20,24 @@ def calculate_word_vector_model(input_path,output_path = None):
     model = gensim.models.Word2Vec(document)
     model.save(output_path)
     return model
-
+# compare_phrase(str1, str2,model): calculate the similarity between two string
+# input format:
+#                 str1, str2: plain string removed puncuation
+#                 model: gensim word vector model, pre-trained
+# output format:
+#                 similarity: a float represneting two phrase similarity
+#                 if_same: a boolean determines if the two strings are similar or not
 def compare_phrase(str1, str2,model):
-    if len(str1) < 6 or len(str2) < 6:
-        return 0, False
     cut_str1 = []
     cut_str2 = []
     for w in jieba.cut(str1):
         if w in model:
             cut_str1.append(w)
-
     for w in jieba.cut(str2):
         if w in model:
             cut_str2.append(w)
+    if len(cut_str1) == 0 or len(cut_str2) == 0:
+        return 0, False
     try:
         similarity = model.n_similarity(cut_str1,cut_str2)
     except:

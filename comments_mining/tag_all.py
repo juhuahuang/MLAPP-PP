@@ -27,9 +27,9 @@ if __name__=="__main__":
     # comments_data = list(db.exec_sql(sql))
     # comments_df = DataFrame(comments_data)
     result = DataFrame()
-    comments_df = DataFrame.from_csv('data/renter_review_text',sep = '\t')
-    comments_df = comments_df[300:500]
-    make_tag = tag_comments.tagging('data/udf_dict','data/wordvec_model_renter','data/renter_tag')
+    comments_df = DataFrame.from_csv('data/order_review',sep = '\t')
+    comments_df = comments_df
+    make_tag = tag_comments.tagging('data/udf_dict','data/wordvec_model_car','data/test_tag')
     comments_df['tags'] = comments_df['comment'].map(make_tag.tag_comments_test)
     comments_df['tags'] = comments_df['tags'].map(utils.print_listoflist2string)
     comments_df.to_csv('tag_test',sep='#')
