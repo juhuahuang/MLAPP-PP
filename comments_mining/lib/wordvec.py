@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 import jieba
 import numpy as np
 sys.path.append('./lib')
@@ -9,6 +11,13 @@ import utils
 import preprocess
 import gensim
 __author__ = 'Administrator'
+
+
+
+ff = open('data/special_word')
+special_word=set()
+for line in ff:
+    special_word.add(line.strip())
 
 
 def calculate_word_vector_model(input_path,output_path = None):
@@ -28,6 +37,11 @@ def calculate_word_vector_model(input_path,output_path = None):
 #                 similarity: a float represneting two phrase similarity
 #                 if_same: a boolean determines if the two strings are similar or not
 def compare_phrase(str1, str2,model):
+    if str2 in special_word:
+        if str1.find(str2)>-1:
+            return 1,True
+        else:
+            return 0, False
     cut_str1 = []
     cut_str2 = []
     for w in jieba.cut(str1):
@@ -43,4 +57,4 @@ def compare_phrase(str1, str2,model):
     except:
         print str1,unicode(str2)
         similarity = 0
-    return similarity,similarity > 0.6
+    return similarity,similarity > 0.7
